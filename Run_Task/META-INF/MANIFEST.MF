@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: com.mycompany.runtask;singleton:=true
+Bundle-Name: Run Task
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .
+Require-Bundle: com.dynatrace.diagnostics.sdk
+Bundle-ManifestVersion: 2
+Bundle-Vendor: redocean
+
