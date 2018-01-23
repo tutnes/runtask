@@ -9,6 +9,36 @@ package com.mycompany.myplugin;
 
 import com.dynatrace.diagnostics.pdk.*;
 import java.util.logging.Logger;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.Header;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONObject;
+
 
 
 public class MyPlugin implements Task {
@@ -41,8 +71,83 @@ public class MyPlugin implements Task {
 	 */
 	@Override
 	public Status setup(TaskEnvironment env) throws Exception {
-		// TODO
-		return new Status(Status.StatusCode.Success);
+        user = env.getConfigString(PARAM_USER);
+        password = env.getConfigPassword(PARAM_PASSWORD);
+        domain = env.getConfigUrl(PARAM_DOMAIN).toString();
+        assignTo = env.getConfigString(PARAM_ASSIGN_TO);
+        configurationItem = env.getConfigString(PARAM_CONFIGURATION_ITEM);
+        contactType = env.getConfigString(PARAM_CONTACT_TYPE);
+        category = env.getConfigString(PARAM_CATEGORY);
+        subcategory = env.getConfigString(PARAM_SUBCATEGORY);
+        assignmentGroup = env.getConfigString(PARAM_ASSIGNMENT_GROUP);
+        company = env.getConfigString(PARAM_COMPANY);
+        cmdbci = env.getConfigString(PARAM_CONFIGURATION_ITEM);
+        impact = env.getConfigString(PARAM_IMPACT);
+        urgency = env.getConfigString(PARAM_URGENCY);
+        priority = env.getConfigString(PARAM_PRIORITY);
+        domainAppend = env.getConfigString(PARAM_DOMAIN_APPEND);
+
+        useProxy = env.getConfigBoolean(PARAM_USE_PROXY).booleanValue();
+        if (useProxy) {
+            proxyHost = env.getConfigString(PARAM_PROXY_HOST);
+            proxyPort = env.getConfigLong(PARAM_PROXY_PORT).intValue();
+
+            proxyAuthenticationRequired = env.getConfigBoolean(PARAM_PROXY_AUTHENTICATION_REQD).booleanValue();
+            if (proxyAuthenticationRequired) {
+                proxyUserName = env.getConfigString(PARAM_PROXY_USERNAME);
+                proxyPassword = env.getConfigPassword(PARAM_PROXY_PASSWORD);
+            }
+        }
+        impact = impact.substring(0, 1);
+        urgency = urgency.substring(0, 1);
+        priority = priority.substring(0, 1);
+
+        String error="";
+        if (user == null || user == "") {
+            error = "User not defined. \n";
+        }
+
+        if (password == null || password == "") {
+            error = error + "Password not defined. \n";
+        }
+
+        if ( domain == null || domain == "") {
+            error = error + "Domain not defined. \n";
+        }
+
+        if (assignTo == null || assignTo == "") {
+            error = error + " AssignTo is not defined.";
+        }
+
+        if (useProxy && (proxyHost == null || proxyHost.isEmpty())) {
+            error = error + " Proxy Host is required when using proxy";
+        }
+
+        if (useProxy && proxyPort == 0) {
+            error = error + " Proxy Port is required when using proxy";
+        }
+
+        if (proxyAuthenticationRequired && (proxyUserName == null || proxyUserName.isEmpty())) {
+            error = error + " Proxy user name is required when using proxy authentication";
+        }
+        if (proxyAuthenticationRequired && (proxyPassword == null || proxyPassword.isEmpty())) {
+            error = error + " Proxy password is required when using proxy authentication";
+        }
+
+        if (domainAppend == null || domainAppend.isEmpty()) {
+            error = error + " Domain append value cannot be empty";
+        }
+
+        if ( error != "") {
+            return new Status(Status.StatusCode.ErrorInternalConfigurationProblem, error);
+        }
+
+
+        authString = buildAuthString(user, password);
+        url = domain + domainAppend;
+
+        log.log(Level.FINER, "Setup is successful");
+        return new Status(Status.StatusCode.Success);
 	}
 
 	/**
@@ -67,8 +172,70 @@ public class MyPlugin implements Task {
 	 */
 	@Override
 	public Status execute(TaskEnvironment env) throws Exception {
-		// TODO
-			return new Status(Status.StatusCode.Success);
+        if (domain.contains("dummy")) {
+            return new Status(Status.StatusCode.Success);
+        }
+        HttpClientBuilder builder = HttpClientBuilder.create();
+        if (useProxy) {
+            HttpHost proxy = new HttpHost(proxyHost, proxyPort);
+            if (proxyAuthenticationRequired) {
+                log.log(Level.FINER, "P-UserName=" + proxyUserName);
+                CredentialsProvider credsProvider = new BasicCredentialsProvider();
+                credsProvider.setCredentials(
+                        new AuthScope(proxyHost, proxyPort),
+                        new UsernamePasswordCredentials(proxyUserName, proxyPassword));
+                builder = builder.setDefaultCredentialsProvider(credsProvider)
+                        .setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+            }
+            builder.setProxy(proxy);
+        }
+        CloseableHttpClient client = builder.build();
+        Header header 	= new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+        List<Header> headers = new ArrayList<Header>();
+        headers.add(header);
+        HttpPost post = new HttpPost(url);
+        post.setHeader(header);
+        //log.log(Level.SEVERE, "authString=\n" + authString);
+        post.addHeader("AUTHORIZATION", "Basic " + authString);
+        String postBody = buildPostBody(env);
+
+        try {
+            StringEntity se = new StringEntity(postBody);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            post.setEntity(se);
+            CloseableHttpResponse response = client.execute(post);
+            int responseCode = response.getStatusLine().getStatusCode();
+            if (responseCode != HttpStatus.SC_CREATED) {
+                log.log(Level.SEVERE, "HTTP Response Code =" + responseCode);
+                return new Status(Status.StatusCode.ErrorTargetServiceExecutionFailed, "HTTP Response Code =" + responseCode);
+            }
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+            StringBuffer result = new StringBuffer();
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+
+            log.log(Level.FINER, result.toString());
+            JSONObject returnJSON = new JSONObject(result.toString());
+            JSONObject resultJSON = returnJSON.getJSONObject("result");
+            log.log(Level.FINER, "result=\n" + resultJSON.toString());
+            return new Status(Status.StatusCode.Success, (String) resultJSON.getString("number"));
+        }
+        catch (MalformedURLException me) {
+            log.log(Level.SEVERE, HelperUtils.getStackTraceAsString(me));
+            return new Status(Status.StatusCode.ErrorTargetServiceExecutionFailed, HelperUtils.getExceptionAsString(me));
+        }
+        catch (Exception e) {
+            log.log(Level.SEVERE, HelperUtils.getStackTraceAsString(e));
+            return new Status(Status.StatusCode.ErrorTargetServiceExecutionFailed, HelperUtils.getExceptionAsString(e));
+        }
+        finally {
+            if (client != null ) {
+                client.close();
+            }
+        }
 	}
 
 	/**
