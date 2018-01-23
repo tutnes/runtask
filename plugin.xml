@@ -2,10 +2,10 @@
 <?eclipse version="3.2"?>
 <!-- plugin.xml file written by dynaTrace Client 5.6.0 -->
 <plugin>
-  <extension point="com.dynatrace.diagnostics.pdk.pluginconfig" id="com.dynaTrace.diagnostics.ServiceNow" name="Service Now Alert Plugin">
+  <extension point="com.dynatrace.diagnostics.pdk.pluginconfig" id="com.dynaTrace.diagnostics.runtask" name="RunTask">
     <information>
       <category value="" />
-      <displayname value="Service Now Alert Plugin" />
+      <displayname value="RunTask" />
       <description value="Changed Category from List to Text Input to allow for custom categories." />
       <supportlevel value="unsupported" />
     </information>
@@ -72,7 +72,7 @@
       <property key="company" label="Company" type="string" description="My property description ..." default="" multiline="false" />
     </configuration>
   </extension>
-  <extension point="com.dynatrace.diagnostics.pdk.action" id="com.dynaTrace.diagnostics.ServiceNow.action" name="ServiceNow Action Plugin">
-    <plugin configid="com.dynaTrace.diagnostics.ServiceNow" class="com.dynatrace.plugin.ServiceNowAction" />
+  <extension point="com.dynatrace.diagnostics.pdk.action" id="com.dynaTrace.diagnostics.runtask.action" name="RunTask Action Plugin">
+    <plugin configid="com.dynaTrace.diagnostics.runtask" class="com.dynatrace.plugin.ServiceNowAction" />
   </extension>
 </plugin>
