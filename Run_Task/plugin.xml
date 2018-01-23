@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<!-- plugin.xml file written by Dynatrace Client 7.0.14 -->
+<plugin>
+  <extension point="com.dynatrace.diagnostics.pdk.pluginconfig" id="com.mycompany.runtask" name="Run Task">
+    <information>
+      <category value="" />
+      <displayname value="Run Task" />
+      <description value="Runtask " />
+    </information>
+    <configuration>
+      <property key="system_profile" label="System Profile" type="string" description="My property description ..." default="default" multiline="false" />
+      <property key="task" label="Task" type="string" description="My property description ..." default="default" multiline="false" />
+    </configuration>
+  </extension>
+  <extension point="com.dynatrace.diagnostics.pdk.action" id="com.mycompany.runtask.action" name="Run Task">
+    <plugin configid="com.mycompany.runtask" class="com.mycompany.myplugin.MyPlugin" />
+  </extension>
+</plugin>
