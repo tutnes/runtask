@@ -7,6 +7,7 @@
       <category value="" />
       <displayname value="Run Task" />
       <description value="This plugin runs a task" />
+      <supportlevel value="unsupported" />
     </information>
     <configuration>
       <property key="system_profile" label="System Profile" type="string" description="System Profile where the task is" default="Monitoring" multiline="false" />

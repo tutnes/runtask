@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: com.evry.mercury;singleton:=true
+Bundle-Version: 1.0.4
+Bundle-Name: Create Evry Incident to Mercury
+Bundle-ClassPath: .,lib/com.dynatrace.diagnostics.sdk.jar,lib/commons-
+ lang3-3.2.1.jar
+Require-Bundle: com.dynatrace.diagnostics.sdk
+Bundle-ManifestVersion: 2
+Bundle-Vendor: Tarjei Utnes
+

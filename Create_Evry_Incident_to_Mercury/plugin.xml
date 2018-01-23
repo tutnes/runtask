@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<!-- plugin.xml file written by dynaTrace Client 5.5.0 -->
+<plugin>
+  <extension point="com.dynatrace.diagnostics.pdk.pluginconfig" id="com.evry.mercury" name="Create Evry Incident to Mercury">
+    <information>
+      <category value="" />
+      <displayname value="Create Evry Incident to Merucry" />
+      <description value="Creates an incident in Mercury, that will create an incident in SM9" />
+      <supportlevel value="unsupported" />
+    </information>
+    <configuration>
+      <property key="hpooURL" label="URL (Host)" type="url" description="The host of the Mercury server" default="http://153.110.187.110/cgi-bin/sc_int/dynatrace-sm9_b.pl" />
+      <property key="flowParam" label="Param" type="string" description="Parameters to send to Mercury" default="ci={$host}&amp;priority=2&amp;tag=N&amp;station={$dynaTrace}&amp;eventtext={$incidentMessage}" multiline="false" />
+    </configuration>
+  </extension>
+  <extension point="com.dynatrace.diagnostics.pdk.action" id="com.evry.mercury.action" name="Evry Mercury Incident">
+    <plugin configid="com.evry.mercury" class="com.hpoo.runFlow.RunFlow" />
+  </extension>
+</plugin>
