@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="38b55afd-8763-4048-b2f0-aeae11c94785" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/.classpath" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/.project" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/META-INF/MANIFEST.MF" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/build.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/build/com.mycompany.runtask_1.0.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/build/com/mycompany/myplugin/MyPlugin.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/plugin.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Run_Task/src/com/mycompany/myplugin/MyPlugin.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/dynatrace/plugin/ServiceNowAction.java" afterPath="$PROJECT_DIR$/src/com/dynatrace/plugin/ServiceNowAction.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,8 +16,18 @@
       <file leaf-file-name="ServiceNowAction.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/dynatrace/plugin/ServiceNowAction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2125">
-              <caret line="46" column="19" lean-forward="false" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
+            <state relative-caret-position="204">
+              <caret line="48" column="33" lean-forward="true" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HelperUtils.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/dynatrace/plugin/utils/HelperUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="34" column="16" lean-forward="true" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -44,6 +47,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Run_Task/src/com/mycompany/myplugin/MyPlugin.java" />
+        <option value="$PROJECT_DIR$/src/com/dynatrace/plugin/ServiceNowAction.java" />
       </list>
     </option>
   </component>
@@ -108,6 +112,15 @@
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="dynatrace" type="462c0819:PsiDirectoryNode" />
               <item name="plugin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="runtask" type="b2602c69:ProjectViewProjectNode" />
+              <item name="runtask" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="dynatrace" type="462c0819:PsiDirectoryNode" />
+              <item name="plugin" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -231,12 +244,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1516710625511</updated>
-      <workItem from="1516710628939" duration="669000" />
+      <workItem from="1516710628939" duration="900000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="669000" />
+    <option name="totallyTimeSpent" value="900000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -289,10 +302,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/dynatrace/plugin/utils/HelperUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="34" column="16" lean-forward="true" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/dynatrace/plugin/ServiceNowAction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2125">
-          <caret line="46" column="19" lean-forward="false" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
+        <state relative-caret-position="204">
+          <caret line="48" column="33" lean-forward="true" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
           <folding />
         </state>
       </provider>

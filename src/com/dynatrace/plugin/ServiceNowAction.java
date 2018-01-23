@@ -41,9 +41,9 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
-public class ServiceNowAction implements Action {
+public class RunTask implements Action {
 
-	private static final Logger log = Logger.getLogger(ServiceNowAction.class.getName());
+	private static final Logger log = Logger.getLogger(RunTask.class.getName());
 	private static String user;
 	private static String password;
 	private static String domain;
@@ -289,10 +289,6 @@ public class ServiceNowAction implements Action {
 	
 	private String buildPostBody(ActionEnvironment env) {
 		Map<String, String> jObj = new LinkedHashMap<String, String>();
-		jObj.put("sysparm_action", "insert");
-		jObj.put("assignment_group", assignTo);
-		jObj.put("knowledge", "false");
-		jObj.put("known_error", "false");
 
 		Collection<Incident> incidents = env.getIncidents();
 		if(incidents == null) {
@@ -334,25 +330,7 @@ public class ServiceNowAction implements Action {
 		String summary = "Incident:" + incidentRule +", Server: " + cmdbci + ", Measure:" + split + ", TriggeredValue:" + triggeredValue + ", ThresholdValue:" + thresholdValue + ", startTime:" + startTime + "| Error Message : " + shrtDesc;
 
 		log.log(Level.FINER, "Summary=" + summary);
-		jObj.put("assigned_to", assignTo);
- 		jObj.put("short_description", shrtDesc);
- 		jObj.put("contact_type", "Alert");
- 		jObj.put("cmdb_ci", cmdbci);
- 		jObj.put("description", summary);
-		jObj.put("measure", '"measure" : {"name" : "'+ split + '", "ThresholdValue" : ' + thresholdValue ', "TriggeredValue": ' + triggeredValue + '" }');
- 		jObj.put("correlation_id", incID);
-		jObj.put("correlation_display", "dynaTrace");
-		jObj.put("u_dtprofile", dtProfile);
-		jObj.put("u_dtincrule", incidentRule);
-		jObj.put("assignment_group", assignmentGroup);
-		jObj.put("Configuration item", configurationItem);
-		jObj.put("contact_type", contactType);
-		jObj.put("category", category);
-		jObj.put("subcategory", subcategory);
-		jObj.put("company", company);
-		jObj.put("impact", impact);
-		jObj.put("urgency", urgency);
-		jObj.put("priority", priority);
+		jObj.put("status", "running");
 				
 		log.log(Level.FINER, "Body=\n" + new JSONObject(jObj).toString());
  		return new JSONObject(jObj).toString();
