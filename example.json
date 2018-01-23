@@ -1,0 +1,22 @@
+{
+    "Configuration item": "psd-2-reporting",
+    "assigned_to": "psd-2-assignmentgroup",
+    "assignment_group": "",
+    "category": "",
+    "cmdb_ci": "psd-2-reporting",
+    "company": "",
+    "contact_type": "",
+    "correlation_display": "dynaTrace",
+    "correlation_id": "fbbbd429-919c-413e-a589-eca1a77eeeb3",
+    "description": "Incident:URL for redoecangroup.* is failing testing, Server: psd-2-reporting, Measure:/boot, TriggeredValue:98.72837829589844, ThresholdValue:80.0, startTime:2017-10-03 13:52:00| Error Message : Host Performance/Disk Storage Utilization: Disk Storage Utilization [disk->/boot] (Host-Agent@ubuntu) upper bound exceeded",
+    "impact": "3",
+    "knowledge": "false",
+    "known_error": "false",
+    "priority": "3",
+    "short_description": "Host Performance/Disk Storage Utilization: Disk Storage Utilization [disk->/boot] (Host-Agent@ubuntu) upper bound exceeded",
+    "subcategory": "",
+    "sysparm_action": "insert",
+    "u_dtincrule": "URL for redoecangroup.* is failing testing",
+    "u_dtprofile": "Monitoring",
+    "urgency": "3"
+}
