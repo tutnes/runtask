@@ -2,11 +2,11 @@
 <?eclipse version="3.2"?>
 <!-- plugin.xml file written by dynaTrace Client 5.6.0 -->
 <plugin>
-  <extension point="com.dynatrace.diagnostics.pdk.pluginconfig" id="com.dynaTrace.diagnostics.ServiceNow" name="Service Now Alert Plugin">
+  <extension point="com.dynatrace.diagnostics.pdk.pluginconfig" id="com.dynaTrace.diagnostics.ServiceNow" name="Run Task Plugin">
     <information>
       <category value="" />
-      <displayname value="Service Now Alert Plugin" />
-      <description value="Changed Category from List to Text Input to allow for custom categories." />
+      <displayname value="Run Task Plugin" />
+      <description value="RunTask to run a task as an action" />
       <supportlevel value="unsupported" />
     </information>
     <configuration>
@@ -39,11 +39,11 @@
           <rule key="proxyAuthenticationRequired" value="true" />
         </visibility>
       </property>
-      <property key="system_profile" label="System Profile" type="string" description="My property description ..." default="default" multiline="false" />
-      <property key="task" label="Task" type="string" description="My property description ..." default="default" multiline="false" />
+      <property key="system_profile" label="System Profile" type="string" description="System Profile in which the Task you want to execute exists" default="default" multiline="false" />
+      <property key="task" label="Task" type="string" description="Name of the task you want to execute" default="default" multiline="false" />
     </configuration>
   </extension>
-  <extension point="com.dynatrace.diagnostics.pdk.action" id="com.dynaTrace.diagnostics.ServiceNow.action" name="ServiceNow Action Plugin">
+  <extension point="com.dynatrace.diagnostics.pdk.action" id="com.dynaTrace.diagnostics.ServiceNow.action" name="Run Task Plugin">
     <plugin configid="com.dynaTrace.diagnostics.ServiceNow" class="com.dynatrace.plugin.ServiceNowAction" />
   </extension>
 </plugin>

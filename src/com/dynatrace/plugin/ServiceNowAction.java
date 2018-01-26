@@ -34,10 +34,10 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+import org.apache.http.impl.client.*;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClientBuilder;
+//import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
@@ -199,7 +199,15 @@ public class ServiceNowAction implements Action {
 			 }
 			 builder.setProxy(proxy);
 		 }
-		 CloseableHttpClient client = builder.build();
+		builder.
+		 boolean ignoreCert = true;
+		 if(ignoreCert) {
+			 CloseableHttpClient client = builder.build();
+			 //CloseableHttpClient client = builder.custom().setHostnameVerifier(AllowAllHostnameVerifier.INSTANCE).build();
+		 }
+		 else {
+			 CloseableHttpClient client = builder.build();
+		 }
 		 Header header 	= new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 		 List<Header> headers = new ArrayList<Header>();
 		 headers.add(header);
@@ -212,8 +220,7 @@ public class ServiceNowAction implements Action {
 
 		 try {
 			 StringEntity se = new StringEntity(postBody);
-			 se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-			 post.setEntity(se);
+			  post.setEntity(se);
 			 CloseableHttpResponse response = client.execute(post);
 			 int responseCode = response.getStatusLine().getStatusCode();
 
