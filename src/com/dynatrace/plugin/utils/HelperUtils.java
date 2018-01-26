@@ -11,7 +11,7 @@ import com.dynatrace.diagnostics.sdk.resources.BaseConstants;
 
 public class HelperUtils {
 	private static final Logger log = Logger.getLogger(HelperUtils.class.getName());
-	
+
 	public static String getExceptionAsString(Exception e) {
 		if (log.isLoggable(Level.FINER)) {
 			log.finer("Entering getExceptionAsString method");
