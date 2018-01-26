@@ -41,6 +41,7 @@
       </property>
       <property key="system_profile" label="System Profile" type="string" description="System Profile in which the Task you want to execute exists" default="default" multiline="false" />
       <property key="task" label="Task" type="string" description="Name of the task you want to execute" default="default" multiline="false" />
+      <property key="ignore_certificate" label="Ignore Certificate validation" type="boolean" description="Ignores validity of certificate" default="" />
     </configuration>
   </extension>
   <extension point="com.dynatrace.diagnostics.pdk.action" id="com.dynaTrace.diagnostics.ServiceNow.action" name="Run Task Plugin">

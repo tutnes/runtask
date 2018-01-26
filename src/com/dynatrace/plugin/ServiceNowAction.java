@@ -34,10 +34,14 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
+
 import org.apache.http.impl.client.*;
-//import org.apache.http.impl.client.CloseableHttpClient;
-//import org.apache.http.impl.client.HttpClientBuilder;
-//import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+
+import org.apache.http.conn.ssl.*;
+
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
@@ -64,6 +68,7 @@ public class ServiceNowAction implements Action {
 	private final static String PARAM_DOMAIN = "domain";
 	private final static String PARAM_SYSTEM_PROFILE = "system_profile";
 	private final static String PARAM_TASK = "task";
+	private final static String PARAM_IGNORE_CERT = "ignore_certificate";
 	
 	private String domainAppend;
 	private String url;
@@ -76,6 +81,7 @@ public class ServiceNowAction implements Action {
 	private String proxyPassword;
 	private String system_profile;
 	private String task;
+	private boolean ignoreCert;
 	
 	/**
 	 * Initializes the Action Plugin. This method is always 
@@ -99,7 +105,7 @@ public class ServiceNowAction implements Action {
 		system_profile = env.getConfigString(PARAM_SYSTEM_PROFILE);
 		task = env.getConfigString(PARAM_TASK);
 		domainAppend = "/api/v2/profiles/" + system_profile + "/tasks/" + task + "/status";
-
+		ignoreCert = env.getConfigBoolean(PARAM_IGNORE_CERT).booleanValue();
 		useProxy = env.getConfigBoolean(PARAM_USE_PROXY).booleanValue();
 		if (useProxy) {
 			proxyHost = env.getConfigString(PARAM_PROXY_HOST);
@@ -117,6 +123,10 @@ public class ServiceNowAction implements Action {
 		if (user == null || user == "") {
 			error = "User not defined. \n";
 		}
+
+
+
+
 		
 		if (password == null || password == "") {
 			error = error + "Password not defined. \n";
@@ -179,12 +189,7 @@ public class ServiceNowAction implements Action {
 	 *         method call
 	 */	@Override
 	public Status execute(ActionEnvironment env) throws Exception {
-		 // Since I don't have an account with ServiceNow, I am going to pass a dummy domain name.
-		 // I want this plugin to test successfully for me to send it to the customers. If dummy domain was found, I am returning
-		 // SUCCESS for the plugin to test.
-		 if (domain.contains("dummy")) {
-			 return new Status(Status.StatusCode.Success);
-		 }
+
 		 HttpClientBuilder builder = HttpClientBuilder.create();
 		 if (useProxy) {
 			 HttpHost proxy = new HttpHost(proxyHost, proxyPort);
@@ -199,15 +204,36 @@ public class ServiceNowAction implements Action {
 			 }
 			 builder.setProxy(proxy);
 		 }
-		builder.
-		 boolean ignoreCert = true;
-		 if(ignoreCert) {
-			 CloseableHttpClient client = builder.build();
-			 //CloseableHttpClient client = builder.custom().setHostnameVerifier(AllowAllHostnameVerifier.INSTANCE).build();
-		 }
-		 else {
-			 CloseableHttpClient client = builder.build();
-		 }
+
+
+		 // SSL Hack
+		CloseableHttpClient client;
+
+
+		if (ignoreCert) {
+			SSLContextBuilder sslbuilder = new SSLContextBuilder();
+			sslbuilder.loadTrustMaterial(null, new TrustStrategy(){
+				public boolean isTrusted(X509Certificate[] chain, String authType)
+						throws CertificateException {
+					return true;
+				}
+			});
+			sslbuilder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+
+			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+					sslbuilder.build(),new NoopHostnameVerifier());
+			client = HttpClients
+					.custom()
+					.setSSLSocketFactory(sslsf).build();
+		//			.setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE);
+
+
+
+		}
+		else {
+
+			client = builder.build();
+		}
 		 Header header 	= new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 		 List<Header> headers = new ArrayList<Header>();
 		 headers.add(header);
