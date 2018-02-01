@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: com.dynaTrace.diagnostics.ServiceNow;singleton:=t
  rue
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Bundle-Name: Run Task Plugin
 Bundle-ClassPath: .,lib/commons-codec-1.10.jar,lib/commons-logging-1.2
  .jar,lib/httpclient-4.5.5.jar,lib/httpcore-4.4.9.jar,lib/java-json.ja

@@ -14,6 +14,7 @@ import com.dynatrace.plugin.utils.HelperUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -104,7 +105,8 @@ public class ServiceNowAction implements Action {
 		domain = env.getConfigUrl(PARAM_DOMAIN).toString();
 		system_profile = env.getConfigString(PARAM_SYSTEM_PROFILE);
 		task = env.getConfigString(PARAM_TASK);
-		domainAppend = "/api/v2/profiles/" + system_profile + "/tasks/" + task + "/status";
+		URI uriPath = new URI(null,null,"/api/v2/profiles/" + system_profile + "/tasks/" + task + "/status",null);
+		domainAppend = uriPath.toString();
 		ignoreCert = env.getConfigBoolean(PARAM_IGNORE_CERT).booleanValue();
 		useProxy = env.getConfigBoolean(PARAM_USE_PROXY).booleanValue();
 		if (useProxy) {
